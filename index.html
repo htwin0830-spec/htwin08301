@@ -1,0 +1,980 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#e8f8ef">
+  <title>GreenType | MBTI 테스트</title>
+
+  <style>
+    :root {
+      --green: #249b68;
+      --green-dark: #16784e;
+      --mint: #dff7e9;
+      --mint-light: #f4fcf7;
+      --text: #20372d;
+      --muted: #7b8d82;
+      --border: #e2eee6;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 28px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(ellipse at top left, #d5f6e4 0%, transparent 45%),
+        linear-gradient(135deg, #f3fbf5, #e6f5ec);
+      color: var(--text);
+      font-family: "Pretendard", "Malgun Gothic", Arial, sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    button:focus-visible {
+      outline: 3px solid #74c99d;
+      outline-offset: 3px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 650px;
+      padding: 38px;
+      background: var(--white);
+      border: 1px solid #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 20px 65px #215d3b12;
+      overflow: hidden;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-bottom: 32px;
+      color: var(--green-dark);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .brand-icon {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      height: 34px;
+      background: var(--mint);
+      border-radius: 12px;
+      font-size: 19px;
+    }
+
+    .screen {
+      animation: appear 0.4s ease both;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 32px;
+      background: linear-gradient(135deg, #e4f9eb, #c5efd7);
+      font-size: 48px;
+      transform: rotate(-3deg);
+    }
+
+    .eyebrow {
+      color: var(--green);
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 13px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 39px);
+      line-height: 1.35;
+      letter-spacing: -1.2px;
+      text-align: center;
+    }
+
+    .highlight {
+      color: var(--green);
+    }
+
+    .subtitle {
+      max-width: 420px;
+      margin: 16px auto 25px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.9;
+      font-size: 15px;
+      word-break: keep-all;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 28px 0;
+    }
+
+    .feature {
+      padding: 15px 6px;
+      background: var(--mint-light);
+      border: 1px solid #e8f5ec;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .feature-icon {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 23px;
+    }
+
+    .feature span:last-child {
+      font-size: 12px;
+      color: #62786a;
+      font-weight: 600;
+    }
+
+    .primary-btn {
+      width: 100%;
+      min-height: 55px;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 15px;
+      background: var(--green);
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 7px 18px #249b6824;
+    }
+
+    .primary-btn:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px #249b6830;
+    }
+
+    .secondary-btn {
+      min-height: 45px;
+      padding: 11px 18px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: white;
+      color: #607569;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .secondary-btn:hover {
+      background: var(--mint-light);
+      border-color: #b9e4c9;
+    }
+
+    /* 질문 화면 */
+
+    .question-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+
+    .step-label {
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .step-percent {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 8px;
+      width: 100%;
+      margin-bottom: 37px;
+      background: #edf4ef;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #7cdb9d, #249b68);
+      border-radius: inherit;
+      transition: width 0.35s ease;
+    }
+
+    .question-label {
+      display: inline-flex;
+      padding: 7px 12px;
+      margin-bottom: 17px;
+      border-radius: 9px;
+      background: var(--mint-light);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .question-title {
+      min-height: 105px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(23px, 4.5vw, 30px);
+      line-height: 1.65;
+      letter-spacing: -0.7px;
+      text-align: center;
+      word-break: keep-all;
+    }
+
+    .question-help {
+      margin: 10px 0 25px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .answer-btn {
+      width: 100%;
+      min-height: 52px;
+      padding: 13px 17px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      background: white;
+      color: #40574a;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, transform 0.18s;
+    }
+
+    .answer-btn:hover {
+      border-color: #8bd3a7;
+      background: #f6fcf8;
+      transform: translateX(3px);
+    }
+
+    .answer-btn.selected {
+      border-color: var(--green);
+      background: #eaf8ef;
+      color: var(--green-dark);
+    }
+
+    .answer-label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .answer-mark {
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid #d8e6dc;
+      border-radius: 50%;
+      color: transparent;
+      font-size: 11px;
+    }
+
+    .answer-btn.selected .answer-mark {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+
+    .question-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 23px;
+    }
+
+    .privacy-note {
+      color: #96a69a;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    /* 결과 화면 */
+
+    .result-banner {
+      position: relative;
+      overflow: hidden;
+      margin: 23px 0;
+      padding: 29px 18px;
+      border: 1px solid #d8f0e0;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #f0fbf3, #dff6e7);
+      text-align: center;
+    }
+
+    .result-banner::before,
+    .result-banner::after {
+      content: "";
+      position: absolute;
+      width: 85px;
+      height: 85px;
+      border: 16px solid #ffffff75;
+      border-radius: 50%;
+    }
+
+    .result-banner::before {
+      top: -40px;
+      left: -35px;
+    }
+
+    .result-banner::after {
+      right: -40px;
+      bottom: -45px;
+    }
+
+    .result-emoji {
+      position: relative;
+      z-index: 1;
+      font-size: 43px;
+      margin-bottom: 10px;
+    }
+
+    .result-type {
+      position: relative;
+      z-index: 1;
+      color: var(--green-dark);
+      font-size: clamp(45px, 10vw, 64px);
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .result-name {
+      position: relative;
+      z-index: 1;
+      margin-top: 8px;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .result-description {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: #fff;
+      color: #53675a;
+      font-size: 15px;
+      line-height: 2;
+      word-break: keep-all;
+    }
+
+    .result-section-title {
+      margin-bottom: 10px;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .result-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    .result-tag {
+      padding: 8px 12px;
+      border: 1px solid #d9f0e1;
+      border-radius: 99px;
+      background: var(--mint-light);
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .result-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .disclaimer {
+      margin-top: 21px;
+      color: #94a197;
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.8;
+      word-break: keep-all;
+    }
+
+    .footer {
+      margin-top: 28px;
+      color: #9aa99e;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 14px 10px;
+      }
+
+      .container {
+        padding: 25px 19px;
+        border-radius: 22px;
+      }
+
+      .brand {
+        margin-bottom: 26px;
+      }
+
+      .feature {
+        padding: 13px 3px;
+      }
+
+      .feature span:last-child {
+        font-size: 11px;
+      }
+
+      .progress-track {
+        margin-bottom: 29px;
+      }
+
+      .question-title {
+        min-height: 95px;
+      }
+
+      .answer-btn {
+        min-height: 49px;
+        padding: 12px 13px;
+      }
+
+      .result-description {
+        padding: 18px;
+      }
+
+      .result-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="brand">
+      <span class="brand-icon">🌱</span>
+      <span>GreenType</span>
+    </div>
+
+    <!-- 시작 화면 -->
+    <section id="start-screen" class="screen">
+      <div class="hero-icon">🌿</div>
+      <p class="eyebrow">PERSONALITY TEST</p>
+      <h1>나를 알아가는<br><span class="highlight">작은 시작</span></h1>
+      <p class="subtitle">
+        48개의 질문으로 나의 성격 유형을 알아보세요.
+        정답은 없으니 평소 자신의 모습에 가장 가까운 답을 선택하면 돼요.
+      </p>
+
+      <div class="feature-list">
+        <div class="feature">
+          <span class="feature-icon">💬</span>
+          <span>48개 질문</span>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">🍀</span>
+          <span>16가지 유형</span>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">⏱️</span>
+          <span>약 5분</span>
+        </div>
+      </div>
+
+      <button class="primary-btn" id="start-btn">
+        테스트 시작하기 →
+      </button>
+    </section>
+
+    <!-- 질문 화면 -->
+    <section id="question-screen" class="screen hidden">
+      <div class="question-top">
+        <span class="step-label" id="step-label">QUESTION 01</span>
+        <span class="step-percent" id="step-percent">0% 완료</span>
+      </div>
+
+      <div
+        class="progress-track"
+        role="progressbar"
+        id="progress-track"
+        aria-label="테스트 진행률"
+        aria-valuemin="0"
+        aria-valuemax="48"
+        aria-valuenow="0"
+      >
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div class="question-label">나의 성향 알아보기</div>
+      <h1 class="question-title" id="question-title"></h1>
+      <p class="question-help">
+        평소의 나를 떠올리며 가장 가까운 답을 골라보세요.
+      </p>
+
+      <div class="answers" id="answers">
+        <button class="answer-btn" data-value="2">
+          <span class="answer-label">매우 그렇다</span>
+          <span class="answer-mark">✓</span>
+        </button>
+        <button class="answer-btn" data-value="1">
+          <span class="answer-label">그렇다</span>
+          <span class="answer-mark">✓</span>
+        </button>
+        <button class="answer-btn" data-value="0">
+          <span class="answer-label">보통이다</span>
+          <span class="answer-mark">✓</span>
+        </button>
+        <button class="answer-btn" data-value="-1">
+          <span class="answer-label">아니다</span>
+          <span class="answer-mark">✓</span>
+        </button>
+        <button class="answer-btn" data-value="-2">
+          <span class="answer-label">매우 아니다</span>
+          <span class="answer-mark">✓</span>
+        </button>
+      </div>
+
+      <div class="question-footer">
+        <button class="secondary-btn" id="back-btn">← 이전 질문</button>
+        <span class="privacy-note">🌱 모든 질문에 답해 주세요.</span>
+      </div>
+    </section>
+
+    <!-- 결과 화면 -->
+    <section id="result-screen" class="screen hidden">
+      <p class="eyebrow">YOUR PERSONALITY</p>
+      <h1>나의 성격 유형은?</h1>
+
+      <div class="result-banner">
+        <div class="result-emoji" id="result-emoji">🌿</div>
+        <div class="result-type" id="result-type">INFP</div>
+        <div class="result-name" id="result-name">가치 중심의 이상가</div>
+      </div>
+
+      <div class="result-description">
+        <div class="result-section-title">✨ 나의 성격 특징</div>
+        <p id="result-description-text"></p>
+      </div>
+
+      <div class="result-tags" id="result-tags"></div>
+
+      <div class="result-actions">
+        <button class="secondary-btn" id="home-btn">처음으로</button>
+        <button class="primary-btn" id="restart-btn">다시 테스트하기 ↻</button>
+      </div>
+
+      <p class="disclaimer">
+        이 테스트는 재미와 자기 이해를 위한 간단한 참고 자료입니다.
+        정식 심리 검사나 공식 MBTI 검사를 대신하지 않습니다.
+      </p>
+    </section>
+
+    <div class="footer">GREEN TYPE · Discover yourself 🌱</div>
+  </main>
+
+  <script>
+    // ==========================================
+    // 1. MBTI 질문 48개
+    // ==========================================
+
+    const questions = [
+      { question: "사람들과 어울리는 것이 즐겁다.", type: "E" },
+      { question: "혼자만의 시간이 꼭 필요하다.", type: "I" },
+      { question: "모임에서 먼저 말을 거는 편이다.", type: "E" },
+      { question: "낯선 사람과 대화하면 피곤하다.", type: "I" },
+      { question: "현실적인 생각을 자주 한다.", type: "S" },
+      { question: "상상하고 아이디어 내는 것을 좋아한다.", type: "N" },
+      { question: "미래 가능성을 자주 상상한다.", type: "N" },
+      { question: "경험한 사실을 더 믿는 편이다.", type: "S" },
+      { question: "결정을 할 때 논리를 중요하게 생각한다.", type: "T" },
+      { question: "다른 사람의 감정을 중요하게 생각한다.", type: "F" },
+      { question: "문제를 감정보다 분석으로 해결한다.", type: "T" },
+      { question: "친구 고민을 들으면 공감부터 해준다.", type: "F" },
+      { question: "계획을 세우고 행동하는 편이다.", type: "J" },
+      { question: "즉흥적으로 행동하는 편이다.", type: "P" },
+      { question: "일정을 미리 정리하면 마음이 편하다.", type: "J" },
+      { question: "상황에 따라 유연하게 행동하는 편이다.", type: "P" },
+      { question: "새로운 사람을 만나는 것이 재미있다.", type: "E" },
+      { question: "혼자 취미 생활하는 시간이 좋다.", type: "I" },
+      { question: "디테일을 잘 기억하는 편이다.", type: "S" },
+      { question: "창의적인 생각을 자주 한다.", type: "N" },
+      { question: "토론할 때 객관적인 근거를 중요하게 생각한다.", type: "T" },
+      { question: "상대방 기분을 먼저 고려하는 편이다.", type: "F" },
+      { question: "할 일을 미리 끝내는 편이다.", type: "J" },
+      { question: "마감 직전에 집중이 잘 된다.", type: "P" },
+      { question: "파티나 행사를 즐기는 편이다.", type: "E" },
+      { question: "오랜 시간 사람들과 있으면 지친다.", type: "I" },
+      { question: "직접 경험한 것을 더 신뢰한다.", type: "S" },
+      { question: "새로운 아이디어를 떠올리는 걸 좋아한다.", type: "N" },
+      { question: "비판적인 의견도 솔직하게 말하는 편이다.", type: "T" },
+      { question: "다른 사람의 감정을 쉽게 눈치챈다.", type: "F" },
+      { question: "정리정돈을 잘하는 편이다.", type: "J" },
+      { question: "계획 없이 여행 가는 것도 좋다.", type: "P" },
+      { question: "친구를 쉽게 사귀는 편이다.", type: "E" },
+      { question: "혼자 생각하는 시간이 중요하다.", type: "I" },
+      { question: "세부적인 설명을 잘 기억한다.", type: "S" },
+      { question: "추상적인 주제에 흥미를 느낀다.", type: "N" },
+      { question: "논쟁에서는 사실이 가장 중요하다고 생각한다.", type: "T" },
+      { question: "사람 관계에서 배려가 가장 중요하다고 생각한다.", type: "F" },
+      { question: "하루 일정을 계획하는 편이다.", type: "J" },
+      { question: "그때그때 하고 싶은 일을 하는 편이다.", type: "P" },
+      { question: "활동적인 분위기를 좋아한다.", type: "E" },
+      { question: "조용한 공간이 편안하다.", type: "I" },
+      { question: "실용적인 해결 방법을 선호한다.", type: "S" },
+      { question: "독특한 상상을 자주 하는 편이다.", type: "N" },
+      { question: "감정보다 효율이 중요하다고 생각한다.", type: "T" },
+      { question: "친구의 기분 변화에 민감하다.", type: "F" },
+      { question: "체계적인 생활을 선호한다.", type: "J" },
+      { question: "갑작스러운 계획 변경도 괜찮다.", type: "P" }
+    ];
+
+    // ==========================================
+    // 2. 16가지 MBTI 결과
+    // ==========================================
+
+    const results = {
+      INTJ: {
+        name: "전략가",
+        emoji: "♟️",
+        description: "독립적으로 생각하고 장기적인 계획을 세우는 것을 좋아합니다. 복잡한 문제를 분석하고 효율적인 해결책을 찾는 데 흥미를 느낄 수 있습니다.",
+        tags: ["전략적 사고", "독립적", "계획적"]
+      },
+      INTP: {
+        name: "논리적인 탐구자",
+        emoji: "🔬",
+        description: "호기심이 많고 원리를 깊이 이해하려 합니다. 새로운 개념을 분석하고 다양한 가능성을 탐구하는 것을 즐길 수 있습니다.",
+        tags: ["분석적", "호기심", "논리적"]
+      },
+      ENTJ: {
+        name: "목표 지향적인 지도자",
+        emoji: "🚀",
+        description: "목표를 세우고 사람과 자원을 체계적으로 활용하는 데 강점이 있을 수 있습니다. 결단력과 추진력을 중요하게 생각합니다.",
+        tags: ["리더십", "추진력", "목표 지향"]
+      },
+      ENTP: {
+        name: "창의적인 토론가",
+        emoji: "💡",
+        description: "새로운 아이디어와 가능성을 탐색하는 것을 좋아합니다. 익숙한 방식에 질문을 던지고 다양한 관점에서 문제를 바라봅니다.",
+        tags: ["창의적", "도전적", "아이디어"]
+      },
+      INFJ: {
+        name: "통찰력 있는 조언자",
+        emoji: "🌙",
+        description: "사람과 상황의 의미를 깊이 생각하는 편입니다. 가치 있는 목표를 추구하고 주변 사람을 돕는 데 보람을 느낄 수 있습니다.",
+        tags: ["통찰력", "배려", "이상 추구"]
+      },
+      INFP: {
+        name: "가치 중심의 이상가",
+        emoji: "🌷",
+        description: "자신의 가치관과 진정성을 중요하게 생각합니다. 상상력이 풍부하고 의미 있는 일에 마음을 쏟는 편일 수 있습니다.",
+        tags: ["상상력", "진정성", "공감"]
+      },
+      ENFJ: {
+        name: "따뜻한 조력자",
+        emoji: "🤝",
+        description: "사람들의 장점을 발견하고 함께 목표를 이루는 데 관심이 많습니다. 소통과 협력을 중요하게 생각합니다.",
+        tags: ["소통", "협력", "배려"]
+      },
+      ENFP: {
+        name: "열정적인 아이디어형",
+        emoji: "🌈",
+        description: "호기심이 많고 새로운 경험을 즐깁니다. 다양한 가능성을 발견하고 사람들과 아이디어를 나누는 것을 좋아할 수 있습니다.",
+        tags: ["열정", "호기심", "창의성"]
+      },
+      ISTJ: {
+        name: "책임감 있는 현실주의자",
+        emoji: "📘",
+        description: "사실과 약속을 중요하게 생각하고 맡은 일을 꾸준히 수행합니다. 체계적으로 준비하고 정확하게 처리하는 것을 선호할 수 있습니다.",
+        tags: ["책임감", "성실함", "체계적"]
+      },
+      ISFJ: {
+        name: "세심한 지원자",
+        emoji: "🪴",
+        description: "주변 사람을 배려하고 필요한 일을 꼼꼼하게 챙기는 편입니다. 안정적인 환경과 신뢰를 중요하게 생각할 수 있습니다.",
+        tags: ["세심함", "신뢰", "배려"]
+      },
+      ESTJ: {
+        name: "체계적인 관리자",
+        emoji: "📋",
+        description: "일을 명확하게 정리하고 효율적으로 진행하는 것을 선호합니다. 책임감과 현실적인 판단을 중요하게 생각합니다.",
+        tags: ["조직력", "실행력", "책임감"]
+      },
+      ESFJ: {
+        name: "협력적인 소통가",
+        emoji: "🌼",
+        description: "사람들과 조화롭게 지내고 서로 돕는 것을 중요하게 생각합니다. 주변의 필요를 살피고 협력하는 데 강점이 있을 수 있습니다.",
+        tags: ["친절함", "협력", "사교성"]
+      },
+      ISTP: {
+        name: "실용적인 문제 해결사",
+        emoji: "🛠️",
+        description: "직접 관찰하고 실험하며 문제의 원인을 파악하는 것을 좋아합니다. 상황에 맞는 현실적인 해결책을 찾을 수 있습니다.",
+        tags: ["실용적", "분석적", "침착함"]
+      },
+      ISFP: {
+        name: "유연한 감성가",
+        emoji: "🎨",
+        description: "자신만의 가치와 감각을 중요하게 생각합니다. 주변의 아름다움과 현재의 경험을 세심하게 느끼는 편일 수 있습니다.",
+        tags: ["감수성", "유연함", "자유로움"]
+      },
+      ESTP: {
+        name: "활동적인 도전자",
+        emoji: "⚡",
+        description: "직접 행동하며 경험을 통해 배우는 것을 좋아합니다. 변화하는 상황에 빠르게 대응하고 현실적인 해결책을 찾을 수 있습니다.",
+        tags: ["활동적", "대응력", "도전"]
+      },
+      ESFP: {
+        name: "밝은 분위기의 활동가",
+        emoji: "🎉",
+        description: "사람들과 경험을 나누고 현재를 즐기는 편입니다. 주변 분위기를 활기차게 만들고 실제적인 활동에 관심을 보일 수 있습니다.",
+        tags: ["활기", "사교성", "긍정적"]
+      }
+    };
+
+    // ==========================================
+    // 3. 상태와 화면 요소
+    // ==========================================
+
+    let currentQuestion = 0;
+    let answers = [];
+
+    const startScreen = document.getElementById("start-screen");
+    const questionScreen = document.getElementById("question-screen");
+    const resultScreen = document.getElementById("result-screen");
+
+    function showScreen(target) {
+      [startScreen, questionScreen, resultScreen].forEach(screen => {
+        screen.classList.add("hidden");
+      });
+
+      target.classList.remove("hidden");
+
+      // 재진입 시 애니메이션을 다시 실행
+      target.style.animation = "none";
+      void target.offsetWidth;
+      target.style.animation = "";
+    }
+
+    // ==========================================
+    // 4. 테스트 시작과 질문 표시
+    // ==========================================
+
+    function startTest() {
+      currentQuestion = 0;
+      answers = new Array(questions.length).fill(null);
+
+      showScreen(questionScreen);
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const item = questions[currentQuestion];
+
+      document.getElementById("step-label").textContent =
+        `QUESTION ${String(currentQuestion + 1).padStart(2, "0")}`;
+
+      document.getElementById("step-percent").textContent =
+        `${Math.round((currentQuestion / questions.length) * 100)}% 완료`;
+
+      document.getElementById("progress-bar").style.width =
+        `${(currentQuestion / questions.length) * 100}%`;
+
+      const track = document.getElementById("progress-track");
+      track.setAttribute("aria-valuenow", currentQuestion);
+
+      document.getElementById("question-title").textContent = item.question;
+
+      document.getElementById("back-btn").disabled =
+        currentQuestion === 0;
+
+      document.getElementById("back-btn").style.opacity =
+        currentQuestion === 0 ? "0.45" : "1";
+
+      document.querySelectorAll(".answer-btn").forEach(button => {
+        const selected =
+          answers[currentQuestion] === Number(button.dataset.value);
+
+        button.classList.toggle("selected", selected);
+
+        if (selected) {
+          button.setAttribute("aria-pressed", "true");
+        } else {
+          button.setAttribute("aria-pressed", "false");
+        }
+      });
+    }
+
+    // ==========================================
+    // 5. 답변 선택과 이전 질문
+    // ==========================================
+
+    function selectAnswer(value) {
+      answers[currentQuestion] = value;
+
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function goBack() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion();
+      }
+    }
+
+    // ==========================================
+    // 6. MBTI 결과 계산
+    // ==========================================
+
+    function calculateMBTI() {
+      const scores = {
+        E: 0, I: 0,
+        S: 0, N: 0,
+        T: 0, F: 0,
+        J: 0, P: 0
+      };
+
+      questions.forEach((item, index) => {
+        scores[item.type] += answers[index] ?? 0;
+      });
+
+      return (
+        (scores.E >= scores.I ? "E" : "I") +
+        (scores.S >= scores.N ? "S" : "N") +
+        (scores.T >= scores.F ? "T" : "F") +
+        (scores.J >= scores.P ? "J" : "P")
+      );
+    }
+
+    function showResult() {
+      const mbti = calculateMBTI();
+      const result = results[mbti];
+
+      document.getElementById("result-type").textContent = mbti;
+      document.getElementById("result-name").textContent = result.name;
+      document.getElementById("result-emoji").textContent = result.emoji;
+      document.getElementById("result-description-text").textContent =
+        result.description;
+
+      const tagsContainer = document.getElementById("result-tags");
+      tagsContainer.replaceChildren();
+
+      result.tags.forEach(tag => {
+        const element = document.createElement("span");
+        element.className = "result-tag";
+        element.textContent = "# " + tag;
+        tagsContainer.appendChild(element);
+      });
+
+      document.getElementById("progress-bar").style.width = "100%";
+      document.getElementById("step-percent").textContent = "100% 완료";
+
+      showScreen(resultScreen);
+    }
+
+    // ==========================================
+    // 7. 처음으로 / 다시 테스트
+    // ==========================================
+
+    function goHome() {
+      currentQuestion = 0;
+      answers = [];
+      showScreen(startScreen);
+    }
+
+    document.getElementById("start-btn")
+      .addEventListener("click", startTest);
+
+    document.querySelectorAll(".answer-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        selectAnswer(Number(button.dataset.value));
+      });
+    });
+
+    document.getElementById("back-btn")
+      .addEventListener("click", goBack);
+
+    document.getElementById("restart-btn")
+      .addEventListener("click", startTest);
+
+    document.getElementById("home-btn")
+      .addEventListener("click", goHome);
+  </script>
+</body>
+</html>
